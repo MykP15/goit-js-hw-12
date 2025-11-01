@@ -1,52 +1,51 @@
-import SimpleLightbox from "simplelightbox";
-import "simplelightbox/dist/simple-lightbox.min.css";
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 
-const galleryContainer = document.querySelector(".gallery");
-const loader = document.querySelector(".loader");
+const galleryContainer = document.querySelector('.gallery');
+const loader = document.querySelector('.loader');
+const loadMoreBtn = document.querySelector('.load-more');
 
-const lightbox = new SimpleLightbox(".gallery a", {
-  captionsData: "alt",
+let lightbox = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
   captionDelay: 250,
 });
 
 export function createGallery(images) {
   const markup = images
     .map(
-      ({
-        webformatURL,
-        largeImageURL,
-        tags,
-        likes,
-        views,
-        comments,
-        downloads,
-      }) => `
-      <li class="gallery-item">
-        <a href="${largeImageURL}">
-          <img class="galery-image" src="${webformatURL}" alt="${tags}" loading="lazy" />
-        </a>
+      img => `
+      <a class="gallery-item" href="${img.largeImageURL}">
+        <img src="${img.webformatURL}" alt="${img.tags}" loading="lazy" />
         <div class="info">
-          <p><b>Likes:</b> ${likes}</p>
-          <p><b>Views:</b> ${views}</p>
-          <p><b>Comments:</b> ${comments}</p>
-          <p><b>Downloads:</b> ${downloads}</p>
+          <p><b>Likes:</b> ${img.likes}</p>
+          <p><b>Views:</b> ${img.views}</p>
+          <p><b>Comments:</b> ${img.comments}</p>
+          <p><b>Downloads:</b> ${img.downloads}</p>
         </div>
-      </li>`
+      </a>`
     )
-    .join("");
+    .join('');
 
-  galleryContainer.insertAdjacentHTML("beforeend", markup);
-  lightbox.refresh(); 
+  galleryContainer.insertAdjacentHTML('beforeend', markup);
+  lightbox.refresh();
 }
 
 export function clearGallery() {
-  galleryContainer.innerHTML = "";
+  galleryContainer.innerHTML = '';
 }
 
 export function showLoader() {
-  loader.classList.remove("is-hidden");
+  loader.classList.remove('is-hidden');
 }
 
 export function hideLoader() {
-  loader.classList.add("is-hidden");
+  loader.classList.add('is-hidden');
+}
+
+export function showLoadMoreButton() {
+  loadMoreBtn.classList.remove('is-hidden');
+}
+
+export function hideLoadMoreButton() {
+  loadMoreBtn.classList.add('is-hidden');
 }
