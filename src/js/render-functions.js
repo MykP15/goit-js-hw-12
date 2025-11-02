@@ -23,7 +23,7 @@ export function createGallery(images) {
       }) => `
       <li class="gallery-item">
         <a href="${largeImageURL}">
-          <img class="galery-image" src="${webformatURL}" alt="${tags}" loading="lazy" />
+          <img class="gallery-image" src="${webformatURL}" alt="${tags}" loading="lazy" />
         </a>
         <div class="info">
           <p><b>Likes:</b> ${likes}</p>
@@ -36,7 +36,7 @@ export function createGallery(images) {
     .join("");
 
   galleryContainer.insertAdjacentHTML("beforeend", markup);
-  lightbox.refresh(); 
+  lightbox.refresh();
 }
 
 export function clearGallery() {

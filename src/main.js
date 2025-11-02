@@ -1,6 +1,6 @@
-import { getImagesByQuery } from "./js/pixabay-api.js"; 
-import { 
-  createGallery, 
+import { getImagesByQuery } from "./js/pixabay-api.js";
+import {
+  createGallery,
   clearGallery,
   showLoader,
   hideLoader,
@@ -17,6 +17,7 @@ let query = "";
 let page = 1;
 const perPage = 15;
 let totalHits = 0;
+let loadedImages = 0;
 
 form.addEventListener("submit", onSearch);
 loadMoreBtn.addEventListener("click", onLoadMore);
@@ -34,7 +35,8 @@ async function onSearch(e) {
     return;
   }
 
-  page = 1; 
+  page = 1;
+  loadedImages = 0;
   clearGallery();
   hideLoadMoreButton();
   showLoader();
@@ -42,6 +44,7 @@ async function onSearch(e) {
   try {
     const data = await getImagesByQuery(query, page, perPage);
     totalHits = data.totalHits;
+    loadedImages = data.hits.length;
 
     if (data.hits.length === 0) {
       iziToast.info({
@@ -55,7 +58,7 @@ async function onSearch(e) {
 
     createGallery(data.hits);
 
-    if (totalHits > perPage) {
+    if (loadedImages < totalHits) {
       showLoadMoreButton();
     }
   } catch (error) {
@@ -72,26 +75,30 @@ async function onSearch(e) {
 
 async function onLoadMore() {
   page += 1;
+  hideLoadMoreButton();
   showLoader();
 
   try {
     const data = await getImagesByQuery(query, page, perPage);
     createGallery(data.hits);
+    loadedImages += data.hits.length;
 
     const { height: cardHeight } = document
       .querySelector(".gallery li")
       .getBoundingClientRect();
+
     window.scrollBy({
       top: cardHeight * 2,
       behavior: "smooth",
     });
 
-    if (page * perPage >= totalHits) {
-      hideLoadMoreButton();
+    if (loadedImages >= totalHits) {
       iziToast.info({
         message: "We're sorry, but you've reached the end of search results.",
         position: "topRight",
       });
+    } else {
+      showLoadMoreButton();
     }
   } catch (error) {
     iziToast.error({
