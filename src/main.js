@@ -75,6 +75,8 @@ async function onSearch(e) {
 
 async function onLoadMore() {
   page += 1;
+
+ 
   hideLoadMoreButton();
   showLoader();
 
@@ -97,8 +99,9 @@ async function onLoadMore() {
         message: "We're sorry, but you've reached the end of search results.",
         position: "topRight",
       });
+      
     } else {
-      showLoadMoreButton();
+      showLoadMoreButton(); 
     }
   } catch (error) {
     iziToast.error({
